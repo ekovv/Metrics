@@ -17,14 +17,14 @@ func NewService(s storage.Storage) Service {
 func (s *Service) SetMetric(metric string, name string, value float64) error {
 
 	if metric != "gauge" && metric != "counter" {
-		err := errors.New("Invalid metric")
+		err := errors.New("invalid metric")
 		if err != nil {
 			return err
 		}
 	}
 	if metric == "counter" {
 		if value != float64(int(value)) {
-			err := errors.New("Invalid Data Type")
+			err := errors.New("invalid Data Type")
 			if err != nil {
 				return err
 			}
