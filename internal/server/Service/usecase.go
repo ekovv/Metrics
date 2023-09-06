@@ -9,12 +9,12 @@ type Service struct {
 	storage Storage.Storage
 }
 
-func NewService(storage Storage.Storage) *Service {
-	return &Service{storage: Storage.NewStorage(map[string]float64{})}
+func NewService(s Storage.Storage) Service {
+	return Service{
+		storage: Storage.NewStorage()}
 }
 
 func (s *Service) SetMetric(metric string, name string, value float64) error {
-	as := NewService(s.storage)
 
 	if metric != "gauge" && metric != "counter" {
 		err := errors.New("Invalid metric")
@@ -29,9 +29,9 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 				return err
 			}
 		}
-		as.storage.Inc(name, value)
+		s.storage.Inc(name, value)
 	} else {
-		as.storage.Set(name, value)
+		s.storage.Set(name, value)
 	}
 	return nil
 

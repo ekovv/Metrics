@@ -4,11 +4,15 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"metrics/internal/server/Handler"
+	"metrics/internal/server/Service"
+	"metrics/internal/server/Storage"
 	"net/http"
 )
 
 func main() {
-	h := Handler.Handler{}
+	repo := Storage.NewStorage()
+	sr := Service.NewService(repo)
+	h := Handler.NewHandler(sr)
 	router := mux.NewRouter()
 	router.HandleFunc("/update/{metric}/{name}/{value}", h.UpdateMap).Methods(http.MethodPost)
 	http.Handle("/", router)

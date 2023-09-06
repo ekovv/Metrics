@@ -6,11 +6,11 @@ type Storage struct {
 	m map[string]float64
 }
 
-func NewStorage(m map[string]float64) Storage {
+func NewStorage() Storage {
 	return Storage{m: make(map[string]float64)}
 }
 
-type StorageInterface interface {
+type Interface interface {
 	set(name string, value float64)
 	inc(name string, value float64)
 }
@@ -22,6 +22,7 @@ func (s *Storage) Set(name string, value float64) {
 	//	m: &ms,
 	//}
 	//myStor.m[name] = value
+
 	s.m[name] = value
 	fmt.Println(s.m)
 
