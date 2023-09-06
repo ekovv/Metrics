@@ -2,7 +2,7 @@ package Handler
 
 import (
 	"github.com/gorilla/mux"
-	"metric/internal/server/Service"
+	"metrics/internal/server/Service"
 	"net/http"
 	"strconv"
 )

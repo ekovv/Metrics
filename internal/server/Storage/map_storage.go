@@ -6,8 +6,8 @@ type Storage struct {
 	m map[string]float64
 }
 
-func NewStorage(m map[string]float64) *Storage {
-	return &Storage{m: make(map[string]float64)}
+func NewStorage(m map[string]float64) Storage {
+	return Storage{m: make(map[string]float64)}
 }
 
 type StorageInterface interface {

@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"log"
-	"metric/internal/server/Handler"
+	"metrics/internal/server/Handler"
 	"net/http"
 )
 

@@ -2,7 +2,7 @@ package Service
 
 import (
 	"errors"
-	"metric/internal/server/Storage"
+	"metrics/internal/server/Storage"
 )
 
 type Service struct {
@@ -10,10 +10,12 @@ type Service struct {
 }
 
 func NewService(storage Storage.Storage) *Service {
-	return &Service{storage: storage}
+	return &Service{storage: Storage.NewStorage(map[string]float64{})}
 }
 
 func (s *Service) SetMetric(metric string, name string, value float64) error {
+	as := NewService(s.storage)
+
 	if metric != "gauge" && metric != "counter" {
 		err := errors.New("Invalid metric")
 		if err != nil {
@@ -27,9 +29,9 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 				return err
 			}
 		}
-		s.storage.Inc(name, value)
+		as.storage.Inc(name, value)
 	} else {
-		s.storage.Set(name, value)
+		as.storage.Set(name, value)
 	}
 	return nil
 
