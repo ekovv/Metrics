@@ -1,4 +1,4 @@
-package my_handler
+package controller
 
 import (
 	"github.com/gorilla/mux"
