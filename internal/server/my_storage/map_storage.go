@@ -1,4 +1,4 @@
-package Storage
+package my_storage
 
 import "fmt"
 
@@ -18,7 +18,7 @@ type Interface interface {
 func (s *Storage) Set(name string, value float64) {
 	//ms := make(map[string]float64)
 
-	//myStor := &Storage{
+	//myStor := &my_storage{
 	//	m: &ms,
 	//}
 	//myStor.m[name] = value

@@ -1,17 +1,17 @@
-package Handler
+package my_handler
 
 import (
 	"github.com/gorilla/mux"
-	"metrics/internal/server/Service"
+	"metrics/internal/server/service"
 	"net/http"
 	"strconv"
 )
 
 type Handler struct {
-	logic Service.Service
+	logic service.Service
 }
 
-func NewHandler(logic Service.Service) *Handler {
+func NewHandler(logic service.Service) *Handler {
 	return &Handler{logic: logic}
 }
 

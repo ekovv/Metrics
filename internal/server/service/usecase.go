@@ -1,17 +1,17 @@
-package Service
+package service
 
 import (
 	"errors"
-	"metrics/internal/server/Storage"
+	"metrics/internal/server/my_storage"
 )
 
 type Service struct {
-	storage Storage.Storage
+	storage my_storage.Storage
 }
 
-func NewService(s Storage.Storage) Service {
+func NewService(s my_storage.Storage) Service {
 	return Service{
-		storage: Storage.NewStorage()}
+		storage: my_storage.NewStorage()}
 }
 
 func (s *Service) SetMetric(metric string, name string, value float64) error {
