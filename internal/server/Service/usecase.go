@@ -23,7 +23,7 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 		}
 	}
 	if metric == "counter" {
-		if float64(int(value)) != value {
+		if value != float64(int(value)) {
 			err := errors.New("Invalid Data Type")
 			if err != nil {
 				return err
