@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"metrics/internal/server/storage"
+	"reflect"
 )
 
 type Service struct {
@@ -22,6 +23,14 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 			return err
 		}
 	}
+
+	if reflect.TypeOf(value).Kind() != reflect.Float64 || reflect.TypeOf(value).Kind() != reflect.Int {
+		err := errors.New("invalid value type")
+		if err != nil {
+			return err
+		}
+	}
+
 	if metric == "counter" {
 		if value != float64(int(value)) {
 			err := errors.New("invalid Data Type")
