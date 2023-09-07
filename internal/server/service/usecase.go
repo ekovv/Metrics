@@ -24,7 +24,7 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 		}
 	}
 
-	if reflect.TypeOf(value).Kind() != reflect.Float64 || reflect.TypeOf(value).Kind() != reflect.Int {
+	if reflect.TypeOf(value).Kind() != reflect.Float64 && reflect.TypeOf(value).Kind() != reflect.Int || value == 0 {
 		err := errors.New("invalid value type")
 		if err != nil {
 			return err
