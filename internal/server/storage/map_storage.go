@@ -16,13 +16,6 @@ type Interface interface {
 }
 
 func (s *Storage) Set(name string, value float64) {
-	//ms := make(map[string]float64)
-
-	//myStor := &storage{
-	//	m: &ms,
-	//}
-	//myStor.m[name] = value
-
 	s.m[name] = value
 	fmt.Println(s.m)
 

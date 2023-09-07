@@ -26,6 +26,5 @@ func (l *Handler) UpdateMap(res http.ResponseWriter, r *http.Request) {
 		http.Error(res, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
-
 	res.WriteHeader(http.StatusOK)
 }

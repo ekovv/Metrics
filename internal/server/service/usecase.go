@@ -16,7 +16,6 @@ func NewService(s storage.Storage) Service {
 }
 
 func (s *Service) SetMetric(metric string, name string, value float64) error {
-
 	if metric != "gauge" && metric != "counter" {
 		err := errors.New("invalid metric")
 		if err != nil {
