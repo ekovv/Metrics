@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	a := storage.NewStorage()
-	b := service.NewService(a)
-	b.Send()
-	b.Update()
+	st := storage.NewStorage()
+	sr := service.NewService(&st)
+
+	//start
 }

@@ -27,10 +27,10 @@ func (s *Storage) SetCounter(metric string, value int) {
 	s.metricsCounter[metric] = value
 }
 
-func (s *Storage) getGauge() map[string]float64 { //для поллкаунт увеличивает на 1 значение
+func (s *Storage) GetGauge() map[string]float64 { //для поллкаунт увеличивает на 1 значение
 	return s.metricsGauge
 }
 
-func (s *Storage) getCounter() map[string]int { //для поллкаунт увеличивает на 1 значение
+func (s *Storage) GetCounter() map[string]int { //для поллкаунт увеличивает на 1 значение
 	return s.metricsCounter
 }

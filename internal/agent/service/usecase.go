@@ -2,34 +2,41 @@ package service
 
 import (
 	"fmt"
-	"metrics/internal/agent/storage"
 	"net/http"
 	"runtime"
-	"time"
 )
 
 type Service struct {
-	array storage.Storage
+	storage storage
 }
 
-func NewService(array storage.Storage) Service {
-	return Service{array: array}
+func NewService(array storage) Service {
+	return Service{storage: array}
+}
+
+type storage interface {
+	SetGauge(metric string, value float64)
+	SetCounter(metric string, value int)
+	GetGauge() map[string]float64
+	GetCounter() map[string]int
 }
 
 func (a *Service) Send() error {
-	myMap := a.array.Inc()
+	myMapGauge := a.storage.GetGauge()
+	myMapCounter := a.storage.GetCounter()
 	client := &http.Client{}
 	var resp *http.Response
-	for key, value := range myMap {
+	for key, value := range myMapGauge {
 		req, _ := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/gauge/%s/%f", key, value), nil)
 		resp, _ = client.Do(req)
-
+		//ошибки не игнорироватиь
 	}
-	req, _ := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/counter/%s/%f", key, value), nil)
-	resp, _ = client.Do(req)
+	for key, value := range myMapCounter {
+		req, _ := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/counter/%s/%f", key, value), nil)
+		resp, _ = client.Do(req)
+	}
 	defer resp.Body.Close()
 	fmt.Println("done")
-	time.Sleep(10 * time.Second)
 
 	return nil
 }
@@ -37,37 +44,43 @@ func (a *Service) Send() error {
 func (a *Service) Update() error {
 	var memStats runtime.MemStats
 	runtime.ReadMemStats(&memStats)
-	a.array.SetGauge("Alloc", float64(memStats.Alloc))
-	a.array.SetGauge("BuckHashSys", float64(memStats.BuckHashSys))
-	a.array.SetGauge("Frees", float64(memStats.Frees))
-	a.array.SetGauge("GCCPUFraction", float64(memStats.GCSys))
-	a.array.SetGauge("HeapAlloc", float64(memStats.HeapAlloc))
-	a.array.SetGauge("HeapIdle", float64(memStats.HeapIdle))
-	a.array.SetGauge("HeapInuse", float64(memStats.HeapInuse))
-	a.array.SetGauge("HeapObjects", float64(memStats.HeapObjects))
-	a.array.SetGauge("HeapReleased", float64(memStats.HeapReleased))
-	a.array.SetGauge("HeapSys", float64(memStats.HeapSys))
-	a.array.SetGauge("LastGC", float64(memStats.LastGC))
-	a.array.SetGauge("Lookups", float64(memStats.Lookups))
-	a.array.SetGauge("MCacheInuse", float64(memStats.MCacheInuse))
-	a.array.SetGauge("MCacheSys", float64(memStats.MCacheSys))
-	a.array.SetGauge("MSpanInuse", float64(memStats.MSpanInuse))
-	a.array.SetGauge("MSpanSys", float64(memStats.MSpanSys))
-	a.array.SetGauge("Mallocs", float64(memStats.Mallocs))
-	a.array.SetGauge("NextGC", float64(memStats.NextGC))
-	a.array.SetGauge("NumForcedGC", float64(memStats.NumForcedGC))
-	a.array.SetGauge("NumGC", float64(memStats.NumGC))
-	a.array.SetGauge("OtherSys", float64(memStats.OtherSys))
-	a.array.SetGauge("PauseTotalNs", float64(memStats.PauseTotalNs))
-	a.array.SetGauge("StackInuse", float64(memStats.StackInuse))
-	a.array.SetGauge("StackSys", float64(memStats.StackSys))
-	a.array.SetGauge("Sys", float64(memStats.Sys))
-	a.array.SetGauge("TotalAlloc", float64(memStats.TotalAlloc))
-	a.array.SetCounter("PollCount", 0)
-	a.array.SetGauge("RandomValue", 13.2)
+	a.storage.SetGauge("Alloc", float64(memStats.Alloc))
+	a.storage.SetGauge("BuckHashSys", float64(memStats.BuckHashSys))
+	a.storage.SetGauge("Frees", float64(memStats.Frees))
+	a.storage.SetGauge("GCCPUFraction", float64(memStats.GCSys))
+	a.storage.SetGauge("HeapAlloc", float64(memStats.HeapAlloc))
+	a.storage.SetGauge("HeapIdle", float64(memStats.HeapIdle))
+	a.storage.SetGauge("HeapInuse", float64(memStats.HeapInuse))
+	a.storage.SetGauge("HeapObjects", float64(memStats.HeapObjects))
+	a.storage.SetGauge("HeapReleased", float64(memStats.HeapReleased))
+	a.storage.SetGauge("HeapSys", float64(memStats.HeapSys))
+	a.storage.SetGauge("LastGC", float64(memStats.LastGC))
+	a.storage.SetGauge("Lookups", float64(memStats.Lookups))
+	a.storage.SetGauge("MCacheInuse", float64(memStats.MCacheInuse))
+	a.storage.SetGauge("MCacheSys", float64(memStats.MCacheSys))
+	a.storage.SetGauge("MSpanInuse", float64(memStats.MSpanInuse))
+	a.storage.SetGauge("MSpanSys", float64(memStats.MSpanSys))
+	a.storage.SetGauge("Mallocs", float64(memStats.Mallocs))
+	a.storage.SetGauge("NextGC", float64(memStats.NextGC))
+	a.storage.SetGauge("NumForcedGC", float64(memStats.NumForcedGC))
+	a.storage.SetGauge("NumGC", float64(memStats.NumGC))
+	a.storage.SetGauge("OtherSys", float64(memStats.OtherSys))
+	a.storage.SetGauge("PauseTotalNs", float64(memStats.PauseTotalNs))
+	a.storage.SetGauge("StackInuse", float64(memStats.StackInuse))
+	a.storage.SetGauge("StackSys", float64(memStats.StackSys))
+	a.storage.SetGauge("Sys", float64(memStats.Sys))
+	a.storage.SetGauge("TotalAlloc", float64(memStats.TotalAlloc))
+	a.storage.SetCounter("PollCount", 0)
+	a.storage.SetGauge("RandomValue", 13.2)
 	fmt.Println("update")
-	time.Sleep(10 * time.Second)
 	return nil
 }
 
-func increm
+// сделать рандом для рандомвалуе, сделать увеличивающийся счетик для поллкаунт, сделать функцию старт с таймером
+
+func (a *Service) start() {
+	for {
+		a.Update()
+		a.Send()
+	}
+}
