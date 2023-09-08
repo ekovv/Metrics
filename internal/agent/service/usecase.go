@@ -13,9 +13,21 @@ type Service struct {
 	array storage.Storage
 }
 
+func NewService(array storage.Storage) *Service {
+	return &Service{array: array}
+}
+
 func (a *Service) send() error {
-	//
-	//time.Sleep(10 * time.Second)
-	//req, err := http.NewRequest("POST", "http://example.com/api/"+a.array, nil)
+	//myMap := a.array.Inc()
+	//for key, value := range myMap {
+	//	if key == "Pollcount" {
+	//		req, err := http.NewRequest("POST", "http://localhost:8080/update/counter/"+key+"/"+value, nil)
+	//	}
+	//	req, err := http.NewRequest("POST", "http://localhost:8080/update/gauge/"+key+"/"+value, nil)
+	//	if err != nil {
+	//		panic(err)
+	//	}
+	//}
+
 	return nil
 }
