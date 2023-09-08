@@ -1,22 +1,36 @@
 package storage
 
 type Storage struct {
-	metrics map[string]float64
-}
-
-type Inter interface {
-	Set(metric string)
-	Inc(metric string)
+	metricsGauge   map[string]float64
+	metricsCounter map[string]int
 }
 
 func NewStorage() Storage {
-	return Storage{metrics: make(map[string]float64)}
+	return Storage{
+		metricsGauge:   make(map[string]float64),
+		metricsCounter: make(map[string]int),
+	}
 }
 
-func (s *Storage) Set(metric string, value float64) {
-	s.metrics[metric] = value
+type Inter interface {
+	SetGauge(metric string, value float64)
+	SetCounter(metric string, value int)
+	getGauge() map[string]float64
+	getCounter() map[string]int
 }
 
-func (s *Storage) Inc() map[string]float64 {
-	return s.metrics
+func (s *Storage) SetGauge(metric string, value float64) {
+	s.metricsGauge[metric] = value
+}
+
+func (s *Storage) SetCounter(metric string, value int) {
+	s.metricsCounter[metric] = value
+}
+
+func (s *Storage) getGauge() map[string]float64 { //для поллкаунт увеличивает на 1 значение
+	return s.metricsGauge
+}
+
+func (s *Storage) getCounter() map[string]int { //для поллкаунт увеличивает на 1 значение
+	return s.metricsCounter
 }

@@ -2,17 +2,21 @@ package service
 
 import (
 	"errors"
-	"metrics/internal/server/storage"
 	"reflect"
 )
 
 type Service struct {
-	storage storage.Storage
+	storage storage
 }
 
-func NewService(s storage.Storage) Service {
+type storage interface {
+	Set(name string, value float64)
+	Inc(name string, value float64)
+}
+
+func NewService(s storage) Service {
 	return Service{
-		storage: storage.NewStorage()}
+		storage: s}
 }
 
 func (s *Service) SetMetric(metric string, name string, value float64) error {

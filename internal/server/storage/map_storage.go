@@ -10,11 +10,6 @@ func NewStorage() Storage {
 	return Storage{m: make(map[string]float64)}
 }
 
-type Interface interface {
-	set(name string, value float64)
-	inc(name string, value float64)
-}
-
 func (s *Storage) Set(name string, value float64) {
 	s.m[name] = value
 	fmt.Println(s.m)

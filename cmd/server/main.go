@@ -11,7 +11,7 @@ import (
 
 func main() {
 	repo := storage.NewStorage()
-	sr := service.NewService(repo)
+	sr := service.NewService(&repo)
 	h := controller.NewHandler(sr)
 	router := mux.NewRouter()
 	router.HandleFunc("/update/{metric}/{name}/{value}", h.UpdateMap).Methods(http.MethodPost)
