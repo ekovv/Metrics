@@ -12,11 +12,11 @@ type Service struct {
 	array storage.Storage
 }
 
-func NewService(array storage.Storage) *Service {
-	return &Service{array: array}
+func NewService(array storage.Storage) Service {
+	return Service{array: array}
 }
 
-func (a *Service) send() error {
+func (a *Service) Send() error {
 	myMap := a.array.Inc()
 	client := &http.Client{}
 	for key, value := range myMap {
@@ -35,6 +35,7 @@ func (a *Service) send() error {
 		}
 
 	}
+	fmt.Println("done")
 	time.Sleep(10 * time.Second)
 
 	return nil
@@ -71,7 +72,7 @@ func (s *Service) Update() error {
 	s.array.Set("TotalAlloc", float64(memStats.TotalAlloc))
 	s.array.Set("PollCount", 0)
 	s.array.Set("RandomValue", 13.2)
-
+	fmt.Println("update")
 	time.Sleep(10 * time.Second)
 	return nil
 }

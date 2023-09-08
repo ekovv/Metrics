@@ -9,8 +9,8 @@ type Inter interface {
 	Inc(metric string)
 }
 
-func NewStorage(metrics []string) *Storage {
-	return &Storage{metrics: make(map[string]float64)}
+func NewStorage() Storage {
+	return Storage{metrics: make(map[string]float64)}
 }
 
 func (s *Storage) Set(metric string, value float64) {
