@@ -11,8 +11,8 @@ func NewStorage() Storage {
 }
 
 type Interface interface {
-	set(name string, value float64)
-	inc(name string, value float64)
+	Set(name string, value float64)
+	Inc(name string, value float64)
 }
 
 func (s *Storage) Set(name string, value float64) {
