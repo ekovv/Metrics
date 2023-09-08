@@ -19,26 +19,20 @@ func NewService(array storage.Storage) Service {
 func (a *Service) Send() error {
 	myMap := a.array.Inc()
 	client := &http.Client{}
+	var resp *http.Response
 	for key, value := range myMap {
 		if key == "Pollcount" {
 			req, _ := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/counter/%s/%f", key, value), nil)
-			resp, err := client.Do(req)
-			if err != nil {
-				return err
-			}
-			defer resp.Body.Close()
+			resp, _ = client.Do(req)
+
 			continue
 
 		}
 		req, _ := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/gauge/%s/%f", key, value), nil)
-		resp, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
+		resp, _ = client.Do(req)
 
 	}
-
+	defer resp.Body.Close()
 	fmt.Println("done")
 	time.Sleep(10 * time.Second)
 
