@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"io"
 	"math/rand"
 	"net/http"
 	"runtime"
@@ -52,18 +51,13 @@ func (a *Service) Send() error {
 		}
 		fmt.Println("отправлено коунтер")
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			fmt.Println(err)
-		}
-	}(resp.Body)
+	defer resp.Body.Close()
 	fmt.Println("done")
 
 	return nil
 }
 
-// вынести deferbodyclose чтобы до ошибки был
+// сделать что то респ боди клоус
 func (a *Service) Update() error {
 	var memStats runtime.MemStats
 	runtime.ReadMemStats(&memStats)
