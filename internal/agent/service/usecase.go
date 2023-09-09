@@ -2,8 +2,11 @@ package service
 
 import (
 	"fmt"
+	"io"
+	"math/rand"
 	"net/http"
 	"runtime"
+	"time"
 )
 
 type Service struct {
@@ -27,20 +30,40 @@ func (a *Service) Send() error {
 	client := &http.Client{}
 	var resp *http.Response
 	for key, value := range myMapGauge {
-		req, _ := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/gauge/%s/%f", key, value), nil)
-		resp, _ = client.Do(req)
-		//ошибки не игнорироватиь
+		req, err := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/gauge/%s/%f", key, value), nil)
+		if err != nil {
+			fmt.Println(err)
+		}
+		resp, err = client.Do(req)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println("отправлено гауг")
 	}
 	for key, value := range myMapCounter {
-		req, _ := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/counter/%s/%f", key, value), nil)
-		resp, _ = client.Do(req)
+		value += 1
+		req, err := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/counter/%s/%d", key, value), nil)
+		if err != nil {
+			fmt.Println(err)
+		}
+		resp, err = client.Do(req)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println("отправлено коунтер")
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}(resp.Body)
 	fmt.Println("done")
 
 	return nil
 }
 
+// вынести deferbodyclose чтобы до ошибки был
 func (a *Service) Update() error {
 	var memStats runtime.MemStats
 	runtime.ReadMemStats(&memStats)
@@ -71,16 +94,29 @@ func (a *Service) Update() error {
 	a.storage.SetGauge("Sys", float64(memStats.Sys))
 	a.storage.SetGauge("TotalAlloc", float64(memStats.TotalAlloc))
 	a.storage.SetCounter("PollCount", 0)
-	a.storage.SetGauge("RandomValue", 13.2)
+	a.storage.SetGauge("RandomValue", a.randomGenerate())
 	fmt.Println("update")
 	return nil
 }
 
 // сделать рандом для рандомвалуе, сделать увеличивающийся счетик для поллкаунт, сделать функцию старт с таймером
 
-func (a *Service) start() {
+func (a *Service) Start() {
 	for {
-		a.Update()
+		err := a.Update()
+		if err != nil {
+			return
+		}
+		//err = a.Send()
+		//if err != nil {
+		//	return
+		//}
 		a.Send()
 	}
+}
+
+func (a *Service) randomGenerate() float64 {
+	rand.Seed(time.Now().UnixNano())
+	randomFloat := rand.Float64()
+	return randomFloat
 }

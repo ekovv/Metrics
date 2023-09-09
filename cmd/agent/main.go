@@ -8,6 +8,5 @@ import (
 func main() {
 	st := storage.NewStorage()
 	sr := service.NewService(&st)
-
-	//start
+	sr.Start()
 }
