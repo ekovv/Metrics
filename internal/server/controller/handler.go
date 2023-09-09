@@ -20,8 +20,12 @@ func (l *Handler) UpdateMap(res http.ResponseWriter, r *http.Request) {
 	metric := vars["metric"]
 	name := vars["name"]
 	value := vars["value"]
-	val, _ := strconv.ParseFloat(value, 64)
-	err := l.logic.SetMetric(metric, name, val)
+	val, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		http.Error(res, err.Error(), http.StatusBadRequest)
+	}
+
+	err = l.logic.SetMetric(metric, name, val)
 	if err != nil {
 		http.Error(res, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
