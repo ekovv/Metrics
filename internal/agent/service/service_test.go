@@ -1,9 +1,12 @@
 package service
 
 import (
+	"bytes"
 	"errors"
 	"github.com/golang/mock/gomock"
+	"io"
 	"metrics/internal/agent/domains/mocks"
+	"net/http"
 	"testing"
 )
 
@@ -34,6 +37,24 @@ func TestService_Send(t *testing.T) {
 				}) //выбирать тот для кого прогоняю тесты
 			},
 			wantErr: ErrInvalidRequest,
+		},
+		{
+			name: "test2",
+			clientMock: func(c *mocks.MockClient) {
+				c.EXPECT().Do(gomock.Any()).Return(&http.Response{
+					Body: io.NopCloser(bytes.NewBufferString("qfqfq")),
+				}, nil).AnyTimes()
+				//c.EXPECT().Do(gomock.Any()).Return(nil, ErrInvalidRequest)
+			},
+			storageMock: func(c *mocks.MockStorage) {
+				c.EXPECT().GetGauge().Return(map[string]float64{
+					"qfqf": 1.1,
+				}).Times(1)
+				c.EXPECT().GetCounter().Return(map[string]int{
+					"kkjr": 1,
+				}) //выбирать тот для кого прогоняю тесты
+			},
+			wantErr: nil,
 		},
 	}
 
