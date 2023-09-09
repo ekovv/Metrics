@@ -32,11 +32,14 @@ func (a *Service) Send() error {
 		req, err := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/gauge/%s/%f", key, value), nil)
 		if err != nil {
 			fmt.Println(err)
+			return err
 		}
 		resp, err = client.Do(req)
 		if err != nil {
 			fmt.Println(err)
+			return err
 		}
+		resp.Body.Close()
 		fmt.Println("отправлено гауг")
 	}
 	for key, value := range myMapCounter {
@@ -44,14 +47,16 @@ func (a *Service) Send() error {
 		req, err := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/counter/%s/%d", key, value), nil)
 		if err != nil {
 			fmt.Println(err)
+			return err
 		}
 		resp, err = client.Do(req)
 		if err != nil {
 			fmt.Println(err)
+			return err
 		}
+		resp.Body.Close()
 		fmt.Println("отправлено коунтер")
 	}
-	defer resp.Body.Close()
 	fmt.Println("done")
 
 	return nil
@@ -110,7 +115,7 @@ func (a *Service) Start() {
 }
 
 func (a *Service) randomGenerate() float64 {
-	rand.Seed(time.Now().UnixNano())
+	rand.NewSource(time.Now().UnixNano())
 	randomFloat := rand.Float64()
 	return randomFloat
 }
