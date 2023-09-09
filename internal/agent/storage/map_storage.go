@@ -12,13 +12,6 @@ func NewStorage() Storage {
 	}
 }
 
-type Inter interface {
-	SetGauge(metric string, value float64)
-	SetCounter(metric string, value int)
-	getGauge() map[string]float64
-	getCounter() map[string]int
-}
-
 func (s *Storage) SetGauge(metric string, value float64) {
 	s.metricsGauge[metric] = value
 }

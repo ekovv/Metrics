@@ -1,56 +1,55 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"math/rand"
+	"metrics/internal/agent/domains"
 	"net/http"
 	"runtime"
 	"time"
 )
 
 type Service struct {
-	storage storage
+	storage domains.Storage
+	client  domains.Client
 }
 
-func NewService(array storage) Service {
-	return Service{storage: array}
+func NewService(array domains.Storage) Service {
+	return Service{storage: array, client: http.DefaultClient}
 }
 
-type storage interface {
-	SetGauge(metric string, value float64)
-	SetCounter(metric string, value int)
-	GetGauge() map[string]float64
-	GetCounter() map[string]int
-}
+var (
+	ErrInvalidRequest = errors.New("invalid request")
+)
 
 func (a *Service) Send() error {
 	myMapGauge := a.storage.GetGauge()
 	myMapCounter := a.storage.GetCounter()
-	client := &http.Client{}
 	var resp *http.Response
 	for key, value := range myMapGauge {
-		req, err := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/gauge/%s/%f", key, value), nil)
+		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://localhost:8080/update/gauge/%s/%f", key, value), nil)
 		if err != nil {
 			fmt.Println(err)
-			return err
+			return ErrInvalidRequest
 		}
-		resp, err = client.Do(req)
+		resp, err = a.client.Do(req)
 		if err != nil {
 			fmt.Println(err)
-			return err
+			return ErrInvalidRequest
 		}
 		resp.Body.Close()
 		fmt.Println("отправлено гауг")
 	}
 	for key, value := range myMapCounter {
 		value += 1
-		req, err := http.NewRequest("POST", fmt.Sprintf("http://localhost:8080/update/counter/%s/%d", key, value), nil)
+		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://localhost:8080/update/counter/%s/%d", key, value), nil)
 		if err != nil {
 			fmt.Println(err)
 			return err
 		}
-		resp, err = client.Do(req)
+		resp, err = a.client.Do(req)
 		if err != nil {
 			fmt.Println(err)
 			return err
