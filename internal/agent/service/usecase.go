@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"runtime"
@@ -62,7 +63,6 @@ func (a *Service) Send() error {
 	return nil
 }
 
-// сделать что то респ боди клоус
 func (a *Service) Update() error {
 	var memStats runtime.MemStats
 	runtime.ReadMemStats(&memStats)
@@ -98,19 +98,24 @@ func (a *Service) Update() error {
 	return nil
 }
 
-// сделать рандом для рандомвалуе, сделать увеличивающийся счетик для поллкаунт, сделать функцию старт с таймером
-
 func (a *Service) Start() {
 	for {
-		err := a.Update()
+		start := time.Now()
+		for time.Now().Unix()-start.Unix() < 10 {
+			start := time.Now()
+			err := a.Update()
+			if err != nil {
+				log.Fatal(err)
+				return
+			}
+			time.Sleep(2*time.Second - time.Now().Sub(start))
+		}
+
+		err := a.Send()
 		if err != nil {
+			log.Fatalf("cannot send %v", err)
 			return
 		}
-		//err = a.Send()
-		//if err != nil {
-		//	return
-		//}
-		a.Send()
 	}
 }
 
