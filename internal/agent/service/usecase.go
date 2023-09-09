@@ -108,7 +108,7 @@ func (a *Service) Start() {
 				log.Fatal(err)
 				return
 			}
-			time.Sleep(2*time.Second - time.Now().Sub(start))
+			time.Sleep(2*time.Second - time.Since(start))
 		}
 
 		err := a.Send()
