@@ -46,7 +46,5 @@ func (l *Handler) GetValueFromMetricName(c *gin.Context) {
 	if err != nil {
 		c.AbortWithError(http.StatusNotFound, errors.New(err.Error()))
 	}
-	c.HTML(http.StatusOK, "all_metrics.html", gin.H{
-		"title": s,
-	})
+	c.String(http.StatusOK, strconv.FormatFloat(s, 'f', -1, 64))
 }
