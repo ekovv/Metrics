@@ -41,3 +41,15 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 	return nil
 
 }
+
+func (s *Service) GetAllMetrics() map[string]float64 {
+	return s.storage.Get()
+}
+
+func (s *Service) GetValueFromM(name string) (float64, error) {
+	val, err := s.storage.GetOne(name)
+	if err != nil {
+		return 0, err
+	}
+	return val, nil
+}

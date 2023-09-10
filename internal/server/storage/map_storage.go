@@ -1,6 +1,9 @@
 package storage
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Storage struct {
 	m map[string]float64
@@ -26,4 +29,16 @@ func (s *Storage) Inc(name string, value float64) {
 		s.m[name] = value
 	}
 	fmt.Println(s.m)
+}
+
+func (s *Storage) Get() map[string]float64 {
+	return s.m
+}
+
+func (s *Storage) GetOne(name string) (float64, error) {
+	value, err := s.m[name]
+	if !err {
+		return 0, errors.New("invalid name")
+	}
+	return value, nil
 }

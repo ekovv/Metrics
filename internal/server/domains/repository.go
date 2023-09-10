@@ -4,4 +4,6 @@ package domains
 type Repository interface {
 	Set(name string, value float64)
 	Inc(name string, value float64)
+	Get() map[string]float64
+	GetOne(name string) (float64, error)
 }
