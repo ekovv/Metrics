@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"metrics/internal/server/domains/mocks"
+	"reflect"
 	"testing"
 )
 
@@ -91,3 +92,67 @@ func TestService_SetMetric(t *testing.T) {
 	}
 
 }
+
+func TestService_GetAllMetrics(t *testing.T) {
+
+	tests := []struct {
+		name        string
+		storageMock storageMock
+		want        map[string]float64
+	}{
+		{
+			name: "OK#1", // описываем каждый тест:
+			storageMock: func(c *mocks.Repository) {
+				c.Mock.On("Get").Return(map[string]float64{}).Times(1)
+			}, //если код планирует дойти то делаю, если нет то нет
+			want: map[string]float64{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := mocks.NewRepository(t)
+			s := NewService(repo)
+			tt.storageMock(repo)
+			if got := s.GetAllMetrics(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetAllMetrics() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+//func TestService_GetValueFromM(t *testing.T) {
+//	type args struct {
+//		name string
+//	}
+//
+//	tests := []struct {
+//		name        string
+//		args        args
+//		storageMock storageMock
+//		want        float64
+//		wantErr     bool
+//	}{
+//		{
+//			name: "OK#1", // описываем каждый тест:
+//			storageMock: func(c *mocks.Repository) {
+//				c.Mock.On("GetOne").Return().Times(1)
+//			}, //если код планирует дойти то делаю, если нет то нет
+//			want: ,
+//		},
+//	}
+//	for _, tt := range tests {
+//		t.Run(tt.name, func(t *testing.T) {
+//			repo := mocks.NewRepository(t)
+//			s := NewService(repo)
+//			tt.storageMock(repo)
+//			got, err := s.GetValueFromM(tt.args.name)
+//			if (err != nil) != tt.wantErr {
+//				t.Errorf("GetValueFromM() error = %v, wantErr %v", err, tt.wantErr)
+//				return
+//			}
+//			if got != tt.want {
+//				t.Errorf("GetValueFromM() got = %v, want %v", got, tt.want)
+//			}
+//		})
+//	}
+//}
