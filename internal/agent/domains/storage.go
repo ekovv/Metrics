@@ -5,5 +5,5 @@ type Storage interface {
 	SetGauge(metric string, value float64)
 	SetCounter(metric string, value int)
 	GetGauge() map[string]float64
-	GetCounter() map[string]int
+	GetCounter() map[string]int64
 }

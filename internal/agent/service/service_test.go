@@ -32,7 +32,7 @@ func TestService_Send(t *testing.T) {
 				c.EXPECT().GetGauge().Return(map[string]float64{
 					"qfqf": 1.1,
 				}).Times(1)
-				c.EXPECT().GetCounter().Return(map[string]int{
+				c.EXPECT().GetCounter().Return(map[string]int64{
 					"kkjr": 1,
 				}) //выбирать тот для кого прогоняю тесты
 			},
@@ -50,7 +50,7 @@ func TestService_Send(t *testing.T) {
 				c.EXPECT().GetGauge().Return(map[string]float64{
 					"qfqf": 1.1,
 				}).Times(1)
-				c.EXPECT().GetCounter().Return(map[string]int{
+				c.EXPECT().GetCounter().Return(map[string]int64{
 					"kkjr": 1,
 				}) //выбирать тот для кого прогоняю тесты
 			},

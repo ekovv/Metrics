@@ -34,10 +34,10 @@ func (m *MockStorage) EXPECT() *MockStorageMockRecorder {
 }
 
 // GetCounter mocks base method.
-func (m *MockStorage) GetCounter() map[string]int {
+func (m *MockStorage) GetCounter() map[string]int64 {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCounter")
-	ret0, _ := ret[0].(map[string]int)
+	ret0, _ := ret[0].(map[string]int64)
 	return ret0
 }
 
