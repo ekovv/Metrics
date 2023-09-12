@@ -31,7 +31,6 @@ func (l *Handler) UpdateMap(c *gin.Context) {
 		return
 	}
 	c.Status(http.StatusOK)
-	return
 }
 
 func (l *Handler) GetAllMetrics(c *gin.Context) {
