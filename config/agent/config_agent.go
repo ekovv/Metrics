@@ -29,6 +29,6 @@ func ParseFlagsAgent() {
 	}
 
 	if pollInterval, _ := strconv.Atoi(envPoll); pollInterval != 0 {
-		FlagIntReportInterval = pollInterval
+		FlagIntPollInterval = pollInterval
 	}
 }
