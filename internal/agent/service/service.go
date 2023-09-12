@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"metrics/config/agent"
 	"metrics/internal/agent/domains"
 	"net/http"
 	"runtime"
@@ -100,14 +101,16 @@ func (a *Service) Update() error {
 func (a *Service) Start() {
 	for {
 		start := time.Now()
-		for time.Now().Unix()-start.Unix() < 10 {
+		s := int64(agent.FlagIntReportInterval)
+		for time.Now().Unix()-start.Unix() < s {
 			start := time.Now()
 			err := a.Update()
 			if err != nil {
 				log.Fatal(err)
 				return
 			}
-			time.Sleep(2*time.Second - time.Since(start))
+			i := time.Duration(agent.FlagIntPollInterval)
+			time.Sleep(i*time.Second - time.Since(start))
 		}
 
 		err := a.Send()
