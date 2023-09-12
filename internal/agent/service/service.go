@@ -30,6 +30,7 @@ func (a *Service) Send() error {
 	myMapCounter := a.storage.GetCounter()
 	var resp *http.Response
 	addr := agent.FlagRunAddr
+
 	for key, value := range myMapGauge {
 		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://localhost:%s/update/gauge/%s/%f", addr, key, value), nil)
 		if err != nil {
