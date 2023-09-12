@@ -30,7 +30,8 @@ func (l *Handler) UpdateMap(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	c.String(http.StatusOK, "OK")
+	c.Status(http.StatusOK)
+	return
 }
 
 func (l *Handler) GetAllMetrics(c *gin.Context) {
@@ -47,5 +48,6 @@ func (l *Handler) GetValueFromMetricName(c *gin.Context) {
 		c.Status(http.StatusNotFound)
 		return
 	}
+	c.Status(http.StatusOK)
 	c.String(http.StatusOK, strconv.FormatFloat(s, 'f', -1, 64))
 }
