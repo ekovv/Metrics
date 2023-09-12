@@ -45,6 +45,7 @@ func (l *Handler) GetValueFromMetricName(c *gin.Context) {
 	s, err := l.logic.GetValueFromM(name)
 	if err != nil {
 		c.Status(http.StatusNotFound)
+		return
 	}
 	c.String(http.StatusOK, strconv.FormatFloat(s, 'f', -1, 64))
 }
