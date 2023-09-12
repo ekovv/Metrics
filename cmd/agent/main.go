@@ -10,5 +10,6 @@ func main() {
 	agent.ParseFlagsAgent()
 	st := storage.NewStorage()
 	sr := service.NewService(&st)
+
 	sr.Start()
 }
