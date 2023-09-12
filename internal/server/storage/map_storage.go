@@ -36,8 +36,8 @@ func (s *Storage) Get() map[string]float64 {
 }
 
 func (s *Storage) GetOne(name string) (float64, error) {
-	value, err := s.m[name]
-	if !err {
+	value, ok := s.m[name]
+	if !ok {
 		return 0, errors.New("invalid name")
 	}
 	return value, nil

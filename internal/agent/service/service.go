@@ -97,6 +97,7 @@ func (a *Service) Update() error {
 	a.storage.SetCounter("PollCount", 0)
 	a.storage.SetGauge("RandomValue", a.randomGenerate())
 	fmt.Println("update")
+
 	return nil
 }
 
