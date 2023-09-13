@@ -145,13 +145,13 @@ func TestService_GetAllMetrics(t *testing.T) {
 //			repo := mocks.NewRepository(t)
 //			s := NewService(repo)
 //			tt.storageMock(repo)
-//			got, err := s.GetValueFromM(tt.args.name)
+//			got, err := s.GetVal(tt.args.name)
 //			if (err != nil) != tt.wantErr {
-//				t.Errorf("GetValueFromM() error = %v, wantErr %v", err, tt.wantErr)
+//				t.Errorf("GetVal() error = %v, wantErr %v", err, tt.wantErr)
 //				return
 //			}
 //			if got != tt.want {
-//				t.Errorf("GetValueFromM() got = %v, want %v", got, tt.want)
+//				t.Errorf("GetVal() got = %v, want %v", got, tt.want)
 //			}
 //		})
 //	}

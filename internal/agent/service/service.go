@@ -15,10 +15,15 @@ import (
 type Service struct {
 	storage domains.Storage
 	client  domains.Client
+	config  *agent.Config
 }
 
-func NewService(array domains.Storage) Service {
-	return Service{storage: array, client: http.DefaultClient}
+func NewService(array domains.Storage, config agent.Config) Service {
+	return Service{
+		storage: array,
+		client:  http.DefaultClient,
+		config:  &config,
+	}
 }
 
 var (
@@ -29,7 +34,7 @@ func (a *Service) Send() error {
 	myMapGauge := a.storage.GetGauge()
 	myMapCounter := a.storage.GetCounter()
 	var resp *http.Response
-	addr := agent.FlagRunAddr
+	addr := a.config.Host
 
 	for key, value := range myMapGauge {
 		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/update/gauge/%s/%f", addr, key, value), nil)
@@ -104,7 +109,7 @@ func (a *Service) Update() error {
 func (a *Service) Start() {
 	for {
 		start := time.Now()
-		s := int64(agent.FlagIntReportInterval)
+		s := int64(a.config.ReportInterval)
 		for time.Now().Unix()-start.Unix() < s {
 			start := time.Now()
 			err := a.Update()
@@ -112,7 +117,7 @@ func (a *Service) Start() {
 				log.Fatal(err)
 				return
 			}
-			i := time.Duration(agent.FlagIntPollInterval)
+			i := time.Duration(a.config.PollInterval)
 			time.Sleep(i*time.Second - time.Since(start))
 		}
 

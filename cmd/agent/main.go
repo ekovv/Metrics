@@ -7,9 +7,8 @@ import (
 )
 
 func main() {
-	agent.ParseFlagsAgent()
+	config := agent.New()
 	st := storage.NewStorage()
-	sr := service.NewService(&st)
-
+	sr := service.NewService(&st, *config)
 	sr.Start()
 }
