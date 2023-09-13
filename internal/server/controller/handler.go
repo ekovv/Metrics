@@ -35,14 +35,14 @@ func (l *Handler) UpdateMap(c *gin.Context) {
 
 func (l *Handler) GetAllMetrics(c *gin.Context) {
 	c.HTML(http.StatusOK, "all_metrics.html", gin.H{
-		"title": l.logic.GetAllMetrics(),
+		"metrics": l.logic.GetAllMetrics(),
 	})
 }
 
-func (l *Handler) GetValueFromMetricName(c *gin.Context) {
+func (l *Handler) GetMetricValue(c *gin.Context) {
 	_ = c.Param("metric")
 	name := c.Param("name")
-	s, err := l.logic.GetValueFromM(name)
+	s, err := l.logic.GetVal(name)
 	if err != nil {
 		c.Status(http.StatusNotFound)
 		return
