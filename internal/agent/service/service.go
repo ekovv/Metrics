@@ -18,11 +18,11 @@ type Service struct {
 	config  *agent.Config
 }
 
-func NewService(array domains.Storage, config agent.Config) Service {
-	return Service{
+func NewService(array domains.Storage, config *agent.Config) *Service {
+	return &Service{
 		storage: array,
 		client:  http.DefaultClient,
-		config:  &config,
+		config:  config,
 	}
 }
 

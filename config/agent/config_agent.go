@@ -48,7 +48,7 @@ type F struct {
 var f F
 
 func init() {
-	f.host = flag.String("a", "localhost:8080", "-a=host")
+	f.host = flag.String("a", "localhost:8080", "address")
 	f.reportInterval = flag.Int("r", 10, "interval of send metrics")
 	f.pollInterval = flag.Int("p", 2, "interval of update metrics")
 }

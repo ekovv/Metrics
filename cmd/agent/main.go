@@ -9,7 +9,7 @@ import (
 func main() {
 	config := agent.New()
 	st := storage.NewStorage()
-	sr := service.NewService(&st, *config)
+	sr := service.NewService(&st, config)
 
 	sr.Start()
 }
