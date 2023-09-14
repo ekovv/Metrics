@@ -38,7 +38,7 @@ func (s *Storage) Get() map[string]float64 {
 func (s *Storage) GetOne(name string) (float64, error) {
 	value, ok := s.m[name]
 	if !ok {
-		return 0, errors.New("invalid name")
+		return 0, errors.New("invalid metric name")
 	}
 	return value, nil
 }
