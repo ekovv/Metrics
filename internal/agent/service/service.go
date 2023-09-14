@@ -15,10 +15,10 @@ import (
 type Service struct {
 	storage domains.Storage
 	client  domains.Client
-	config  *agent.Config
+	config  agent.Config
 }
 
-func NewService(array domains.Storage, config *agent.Config) *Service {
+func NewService(array domains.Storage, config agent.Config) *Service {
 	return &Service{
 		storage: array,
 		client:  http.DefaultClient,
@@ -34,10 +34,9 @@ func (a *Service) Send() error {
 	myMapGauge := a.storage.GetGauge()
 	myMapCounter := a.storage.GetCounter()
 	var resp *http.Response
-	addr := a.config.Host
 
 	for key, value := range myMapGauge {
-		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/update/gauge/%s/%f", addr, key, value), nil)
+		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/update/gauge/%s/%f", a.config.Host, key, value), nil)
 		if err != nil {
 			fmt.Println(err)
 			return ErrInvalidRequest
@@ -52,7 +51,7 @@ func (a *Service) Send() error {
 	}
 	for key, value := range myMapCounter {
 		value += 1
-		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/update/counter/%s/%d", addr, key, value), nil)
+		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/update/counter/%s/%d", a.config.Host, key, value), nil)
 		if err != nil {
 			fmt.Println(err)
 			return err

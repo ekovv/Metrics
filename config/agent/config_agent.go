@@ -53,7 +53,7 @@ func init() {
 	f.pollInterval = flag.Int("p", 2, "interval of update metrics")
 }
 
-func New() *Config {
+func New() Config {
 	flag.Parse()
 
 	envRunAddr := os.Getenv("ADDRESS")
@@ -71,7 +71,7 @@ func New() *Config {
 		f.pollInterval = &pollInterval
 	}
 
-	return &Config{
+	return Config{
 		Host:           *f.host,
 		ReportInterval: *f.reportInterval,
 		PollInterval:   *f.pollInterval,
