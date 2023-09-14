@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"math"
+	"metrics/internal/server/constants"
 	"metrics/internal/server/domains"
 )
 
@@ -22,7 +23,7 @@ var (
 )
 
 func (s *Service) SetMetric(metric string, name string, value float64) error {
-	if metric != "gauge" && metric != "counter" {
+	if metric != constants.Gauge && metric != constants.Counter {
 		return ErrInvalidMetric
 	}
 
@@ -30,7 +31,7 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 		return ErrInvalidValue
 	}
 
-	if metric == "counter" {
+	if metric == constants.Counter {
 		if value != float64(int(value)) {
 			return ErrInvalidDataType
 		}
