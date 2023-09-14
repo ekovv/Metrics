@@ -7,7 +7,7 @@ import (
 
 var Sugar zap.SugaredLogger
 
-func HttpLogger() gin.HandlerFunc {
+func HTTPLogger() gin.HandlerFunc {
 	return gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
 		Sugar.Info(
 			"url", param.Path,

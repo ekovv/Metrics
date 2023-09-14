@@ -13,7 +13,7 @@ import (
 func main() {
 	config := server.New()
 	router := gin.Default()
-	router.Use(log.HttpLogger())
+	router.Use(log.HTTPLogger())
 	repo := storage.NewStorage()
 	sr := service.NewService(&repo)
 	h := controller.NewHandler(sr)
