@@ -1,7 +1,10 @@
 package controller
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"io"
 	"metrics/internal/server/service"
 	"net/http"
 	"strconv"
@@ -17,6 +20,7 @@ func NewHandler(logic service.Service) *Handler {
 
 func (l *Handler) UpdateMap(c *gin.Context) {
 	metric := c.Param("metric")
+
 	name := c.Param("name")
 	value := c.Param("value")
 	val, err := strconv.ParseFloat(value, 64)
@@ -49,4 +53,25 @@ func (l *Handler) GetMetricValue(c *gin.Context) {
 	}
 	c.Status(http.StatusOK)
 	c.String(http.StatusOK, strconv.FormatFloat(s, 'f', -1, 64))
+}
+
+func (l *Handler) GetMetricByJSON(c *gin.Context) {
+	var metric Metrics
+	b, err := io.ReadAll(c.Request.Body)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	err = json.Unmarshal(b, &metric)
+	if err != nil {
+		fmt.Println("JSON NOT GOOD")
+		return
+	}
+
+	//byte, err := json.Marshal(&metric)
+	//if err != nil {
+	//	fmt.Println("JSON NOT GOOD")
+	//	return
+	//}
+
 }

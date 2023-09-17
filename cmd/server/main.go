@@ -29,6 +29,7 @@ func main() {
 	router.LoadHTMLGlob("internal/templates/all_metrics.html")
 	router.GET("/", h.GetAllMetrics)
 	router.GET("/value/:metric/:name", h.GetMetricValue)
+	router.POST("/update/", h.GetMetricByJSON)
 
 	err = router.Run(config.Host)
 	if err != nil {
