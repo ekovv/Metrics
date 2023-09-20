@@ -1,12 +1,15 @@
 package service
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 	"math/rand"
 	"metrics/config/agent"
 	"metrics/internal/agent/domains"
+	"metrics/internal/agent/models"
 	"net/http"
 	"runtime"
 	"time"
@@ -36,11 +39,23 @@ func (a *Service) Send() error {
 	var resp *http.Response
 
 	for key, value := range myMapGauge {
-		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/update/gauge/%s/%f", a.config.Host, key, value), nil)
+		metric := models.Metrics{
+			ID:    key,
+			MType: "gauge",
+			Delta: nil,
+			Value: &value,
+		}
+		jsonMetric, err := json.Marshal(metric)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/update/", a.config.Host), bytes.NewBuffer(jsonMetric))
 		if err != nil {
 			fmt.Println(err)
 			return ErrInvalidRequest
 		}
+		req.Header.Set("Content-Type", "application/json")
 		resp, err = a.client.Do(req)
 		if err != nil {
 			fmt.Println(err)
@@ -51,11 +66,23 @@ func (a *Service) Send() error {
 	}
 	for key, value := range myMapCounter {
 		value += 1
-		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/update/counter/%s/%d", a.config.Host, key, value), nil)
+		metric := models.Metrics{
+			ID:    key,
+			MType: "counter",
+			Delta: &value,
+			Value: nil,
+		}
+		jsonMetric, err := json.Marshal(metric)
 		if err != nil {
 			fmt.Println(err)
 			return err
 		}
+		req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/update/", a.config.Host), bytes.NewBuffer(jsonMetric))
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+		req.Header.Set("Content-Type", "application/json")
 		resp, err = a.client.Do(req)
 		if err != nil {
 			fmt.Println(err)

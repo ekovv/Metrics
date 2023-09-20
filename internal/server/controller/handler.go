@@ -65,13 +65,21 @@ func (l *Handler) GetMetricByJSON(c *gin.Context) {
 	err = json.Unmarshal(b, &metric)
 	if err != nil {
 		fmt.Println("JSON NOT GOOD")
+		c.Status(http.StatusBadRequest)
 		return
 	}
-
-	//byte, err := json.Marshal(&metric)
-	//if err != nil {
-	//	fmt.Println("JSON NOT GOOD")
-	//	return
-	//}
+	if metric.Delta != nil {
+		delta := float64(*metric.Delta)
+		err = l.logic.SetMetric(metric.MType, metric.ID, delta)
+	} else {
+		err = l.logic.SetMetric(metric.MType, metric.ID, *metric.Value)
+	}
+	bytes, err := json.MarshalIndent(metric, "", "    ")
+	if err != nil {
+		fmt.Println("JSON NOT GOOD")
+		c.Status(http.StatusNotFound)
+		return
+	}
+	c.Writer.Write(bytes)
 
 }
