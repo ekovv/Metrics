@@ -71,8 +71,14 @@ func (l *Handler) GetMetricByJSON(c *gin.Context) {
 	if metric.Delta != nil {
 		delta := float64(*metric.Delta)
 		err = l.logic.SetMetric(metric.MType, metric.ID, delta)
+		if err != nil {
+			fmt.Println(err)
+		}
 	} else {
 		err = l.logic.SetMetric(metric.MType, metric.ID, *metric.Value)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 	bytes, err := json.MarshalIndent(metric, "", "    ")
 	if err != nil {
@@ -80,6 +86,7 @@ func (l *Handler) GetMetricByJSON(c *gin.Context) {
 		c.Status(http.StatusNotFound)
 		return
 	}
+	c.Header("Content-Type", "application/json")
 	c.Writer.Write(bytes)
 
 }
@@ -97,21 +104,13 @@ func (l *Handler) GetMetricValueByJSON(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+	val, err := l.logic.GetVal(metric.ID)
 	if metric.MType == "counter" {
-		valCounter, err := l.logic.GetVal(metric.ID)
-		if err != nil {
-			fmt.Println(err)
-		}
-		metric.Value = nil
-		*metric.Delta = int64(valCounter)
+		delta := int64(val)
+		metric.Delta = &delta
 	}
 	if metric.MType == "gauge" {
-		valGauge, err := l.logic.GetVal(metric.ID)
-		if err != nil {
-			fmt.Println(err)
-		}
-		metric.Delta = nil
-		*metric.Value = valGauge
+		metric.Value = &val
 	}
 	bytes, err := json.MarshalIndent(metric, "", "    ")
 	if err != nil {
@@ -119,6 +118,7 @@ func (l *Handler) GetMetricValueByJSON(c *gin.Context) {
 		c.Status(http.StatusNotFound)
 		return
 	}
+	c.Header("Content-Type", "application/json")
 	c.Writer.Write(bytes)
 
 }
