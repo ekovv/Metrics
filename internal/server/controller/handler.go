@@ -83,3 +83,42 @@ func (l *Handler) GetMetricByJSON(c *gin.Context) {
 	c.Writer.Write(bytes)
 
 }
+
+func (l *Handler) GetMetricValueByJSON(c *gin.Context) {
+	var metric Metrics
+	b, err := io.ReadAll(c.Request.Body)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	err = json.Unmarshal(b, &metric)
+	if err != nil {
+		fmt.Println("JSON NOT GOOD")
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	if metric.MType == "counter" {
+		valCounter, err := l.logic.GetVal(metric.ID)
+		if err != nil {
+			fmt.Println(err)
+		}
+		metric.Value = nil
+		*metric.Delta = int64(valCounter)
+	}
+	if metric.MType == "gauge" {
+		valGauge, err := l.logic.GetVal(metric.ID)
+		if err != nil {
+			fmt.Println(err)
+		}
+		metric.Delta = nil
+		*metric.Value = valGauge
+	}
+	bytes, err := json.MarshalIndent(metric, "", "    ")
+	if err != nil {
+		fmt.Println("JSON NOT GOOD")
+		c.Status(http.StatusNotFound)
+		return
+	}
+	c.Writer.Write(bytes)
+
+}
