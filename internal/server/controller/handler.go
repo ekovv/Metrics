@@ -105,6 +105,9 @@ func (l *Handler) GetMetricValueByJSON(c *gin.Context) {
 		return
 	}
 	val, err := l.logic.GetVal(metric.ID)
+	if err != nil {
+		fmt.Println(err)
+	}
 	if metric.MType == "counter" {
 		delta := int64(val)
 		metric.Delta = &delta

@@ -65,11 +65,11 @@ func (a *Service) Send() error {
 		fmt.Println("отправлено гауг")
 	}
 	for key, value := range myMapCounter {
-		value += 1
+		val := value + 1
 		metric := models.Metrics{
 			ID:    key,
 			MType: "counter",
-			Delta: &value,
+			Delta: &val,
 			Value: nil,
 		}
 		jsonMetric, err := json.Marshal(metric)
