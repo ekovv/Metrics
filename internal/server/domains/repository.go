@@ -6,4 +6,5 @@ type Repository interface {
 	Inc(name string, value float64)
 	Get() map[string]float64
 	GetOne(name string) (float64, error)
+	GetValueStJSON(name string) (float64, error)
 }

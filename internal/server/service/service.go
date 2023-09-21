@@ -43,6 +43,14 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 
 }
 
+func (s *Service) GetValJSON(name string) (float64, error) {
+	val, err := s.storage.GetValueStJSON(name)
+	if err != nil {
+		return 0, err
+	}
+	return val, nil
+}
+
 func (s *Service) GetAllMetrics() map[string]float64 {
 	return s.storage.Get()
 }

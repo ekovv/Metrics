@@ -74,12 +74,27 @@ func (l *Handler) GetMetricByJSON(c *gin.Context) {
 		if err != nil {
 			fmt.Println(err)
 		}
+		delta, err = l.logic.GetValJSON(metric.ID)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		newDel := int64(delta)
+		metric.Delta = &newDel
 	} else {
 		err = l.logic.SetMetric(metric.MType, metric.ID, *metric.Value)
 		if err != nil {
 			fmt.Println(err)
 		}
+		val, err := l.logic.GetValJSON(metric.ID)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		newVal := &val
+		metric.Value = newVal
 	}
+
 	bytes, err := json.MarshalIndent(metric, "", "    ")
 	if err != nil {
 		fmt.Println("JSON NOT GOOD")
