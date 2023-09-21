@@ -85,20 +85,20 @@ func (l *Handler) GetMetricByJSON(c *gin.Context) {
 		err = l.logic.SetMetric(metric.MType, metric.ID, *metric.Value)
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
 		val, err := l.logic.GetValJSON(metric.ID)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		newVal := &val
-		metric.Value = newVal
+		metric.Value = &val
 	}
 
 	bytes, err := json.MarshalIndent(metric, "", "    ")
 	if err != nil {
 		fmt.Println("JSON NOT GOOD")
-		c.Status(http.StatusNotFound)
+		c.Status(http.StatusInternalServerError)
 		return
 	}
 	c.Header("Content-Type", "application/json")

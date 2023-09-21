@@ -27,7 +27,7 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 		return ErrInvalidMetric
 	}
 
-	if math.IsNaN(value) || value == 0 {
+	if math.IsNaN(value) {
 		return ErrInvalidValue
 	}
 
