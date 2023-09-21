@@ -65,6 +65,7 @@ func (a *Service) Send() error {
 		fmt.Println("отправлено гауг")
 	}
 	for key, value := range myMapCounter {
+		value += 1
 		metric := models.Metrics{
 			ID:    key,
 			MType: "counter",
@@ -126,8 +127,6 @@ func (a *Service) Update() error {
 	a.storage.SetGauge("TotalAlloc", float64(memStats.TotalAlloc))
 	a.storage.SetCounter("PollCount", 0)
 	a.storage.SetGauge("RandomValue", a.randomGenerate())
-	m := a.storage.GetCounter()
-	m["PollCount"] += 1
 	fmt.Println("update")
 
 	return nil
