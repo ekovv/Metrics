@@ -50,6 +50,7 @@ func (s *Service) GetAllMetrics() map[string]float64 {
 func (s *Service) GetVal(name string) (float64, error) {
 	val, err := s.storage.GetOne(name)
 	if err != nil {
+		fmt.Println(name)
 		return 0, err
 	}
 	return val, nil
