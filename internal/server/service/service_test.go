@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"math"
 	"metrics/internal/server/domains/mocks"
 	"reflect"
 	"testing"
@@ -28,7 +29,7 @@ func TestService_SetMetric(t *testing.T) {
 			args: args{
 				metric: "sgnlsgls",
 				name:   "wnejnw",
-				value:  0,
+				value:  math.NaN(),
 			},
 			storageMock: func(c *mocks.Repository) {},
 			wantErr:     ErrInvalidMetric,
@@ -51,7 +52,7 @@ func TestService_SetMetric(t *testing.T) {
 			args: args{
 				metric: "gauge",
 				name:   "wnejnw",
-				value:  0,
+				value:  math.NaN(),
 			},
 			storageMock: func(c *mocks.Repository) {},
 			wantErr:     ErrInvalidValue,
