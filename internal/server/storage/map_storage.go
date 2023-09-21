@@ -35,14 +35,6 @@ func (s *Storage) Get() map[string]float64 {
 	return s.m
 }
 
-func (s *Storage) GetValueStJSON(name string) (float64, error) {
-	value, ok := s.m[name]
-	if !ok {
-		return 0, fmt.Errorf("invalid metric name")
-	}
-	return value, nil
-}
-
 func (s *Storage) GetOne(name string) (float64, error) {
 	value, ok := s.m[name]
 	if !ok {

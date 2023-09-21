@@ -74,7 +74,7 @@ func (l *Handler) GetMetricByJSON(c *gin.Context) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		delta, err = l.logic.GetValJSON(metric.ID)
+		delta, err = l.logic.GetVal(metric.ID)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -87,7 +87,7 @@ func (l *Handler) GetMetricByJSON(c *gin.Context) {
 			fmt.Println(err)
 			return
 		}
-		val, err := l.logic.GetValJSON(metric.ID)
+		val, err := l.logic.GetVal(metric.ID)
 		if err != nil {
 			fmt.Println(err)
 			return
