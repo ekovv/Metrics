@@ -35,7 +35,9 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 		if value != float64(int(value)) {
 			return ErrInvalidDataType
 		}
+		value += 1
 		s.storage.Inc(name, value)
+		fmt.Println("закинул в мапу коунтер")
 	} else {
 		s.storage.Set(name, value)
 	}
