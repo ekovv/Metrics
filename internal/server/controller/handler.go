@@ -59,6 +59,7 @@ func (l *Handler) UpdateByJSON(c *gin.Context) {
 	var metric Metrics
 	b, err := io.ReadAll(c.Request.Body)
 	if err != nil {
+		fmt.Println("JSON NOT GOOD")
 		c.Status(http.StatusBadRequest)
 		return
 	}
