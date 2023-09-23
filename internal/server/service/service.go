@@ -27,7 +27,7 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 		return ErrInvalidMetric
 	}
 
-	if math.IsNaN(value) || value == 0 {
+	if math.IsNaN(value) {
 		return ErrInvalidValue
 	}
 
@@ -36,6 +36,7 @@ func (s *Service) SetMetric(metric string, name string, value float64) error {
 			return ErrInvalidDataType
 		}
 		s.storage.Inc(name, value)
+		fmt.Println("закинул в мапу коунтер")
 	} else {
 		s.storage.Set(name, value)
 	}
@@ -50,6 +51,7 @@ func (s *Service) GetAllMetrics() map[string]float64 {
 func (s *Service) GetVal(name string) (float64, error) {
 	val, err := s.storage.GetOne(name)
 	if err != nil {
+		fmt.Println(name)
 		return 0, err
 	}
 	return val, nil

@@ -24,12 +24,12 @@ func main() {
 	}
 	defer logger.Sync()
 	log.Sugar = *logger.Sugar()
-
 	router.POST("/update/:metric/:name/:value", h.UpdateMap)
 	router.LoadHTMLGlob("internal/templates/all_metrics.html")
 	router.GET("/", h.GetAllMetrics)
 	router.GET("/value/:metric/:name", h.GetMetricValue)
-
+	router.POST("/update/", h.UpdateByJSON)
+	router.POST("/value/", h.GetMetricValueByJSON)
 	err = router.Run(config.Host)
 	if err != nil {
 		return
