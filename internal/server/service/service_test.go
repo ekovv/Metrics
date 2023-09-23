@@ -75,7 +75,7 @@ func TestService_SetMetric(t *testing.T) {
 				value:  1.0,
 			},
 			storageMock: func(c *mocks.Repository) {
-				c.Mock.On("Inc", "wnejnw", 2.0).Return(nil).Times(1)
+				c.Mock.On("Inc", "wnejnw", 1.0).Return(nil).Times(1)
 			}, //если код планирует дойти то делаю, если нет то нет
 			wantErr: nil,
 		},
