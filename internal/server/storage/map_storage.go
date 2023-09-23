@@ -21,6 +21,7 @@ func (s *Storage) Set(name string, value float64) {
 
 func (s *Storage) Inc(name string, value float64) {
 	s.m[name] += value
+	fmt.Println(s.m)
 }
 
 func (s *Storage) Get() map[string]float64 {

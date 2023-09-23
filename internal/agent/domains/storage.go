@@ -6,4 +6,5 @@ type Storage interface {
 	IncCounter(metric string, value int64)
 	GetGauge() map[string]float64
 	GetCounter() map[string]int64
+	Clear()
 }

@@ -152,6 +152,8 @@ func (a *Service) Start() {
 			log.Fatalf("cannot send %v", err)
 			return
 		}
+
+		a.storage.Clear()
 	}
 }
 

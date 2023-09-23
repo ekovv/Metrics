@@ -27,3 +27,8 @@ func (s *Storage) GetGauge() map[string]float64 { //для поллкаунт у
 func (s *Storage) GetCounter() map[string]int64 { //для поллкаунт увеличивает на 1 значение
 	return s.metricsCounter
 }
+
+func (s *Storage) Clear() {
+	s.metricsCounter = make(map[string]int64)
+	s.metricsGauge = make(map[string]float64)
+}

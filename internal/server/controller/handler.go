@@ -55,7 +55,7 @@ func (l *Handler) GetMetricValue(c *gin.Context) {
 	c.String(http.StatusOK, strconv.FormatFloat(s, 'f', -1, 64))
 }
 
-func (l *Handler) GetMetricByJSON(c *gin.Context) {
+func (l *Handler) UpdateByJSON(c *gin.Context) {
 	var metric Metrics
 	b, err := io.ReadAll(c.Request.Body)
 	if err != nil {
