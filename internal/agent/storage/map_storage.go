@@ -16,9 +16,8 @@ func (s *Storage) SetGauge(metric string, value float64) {
 	s.metricsGauge[metric] = value
 }
 
-func (s *Storage) SetCounter(metric string, value int64) {
-	s.metricsCounter[metric] = value
-	s.metricsCounter[metric] += 1
+func (s *Storage) IncCounter(metric string, value int64) {
+	s.metricsCounter[metric] += value
 }
 
 func (s *Storage) GetGauge() map[string]float64 { //для поллкаунт увеличивает на 1 значение

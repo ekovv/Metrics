@@ -62,15 +62,15 @@ func (mr *MockStorageMockRecorder) GetGauge() *gomock.Call {
 }
 
 // SetCounter mocks base method.
-func (m *MockStorage) SetCounter(metric string, value int64) {
+func (m *MockStorage) IncCounter(metric string, value int64) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetCounter", metric, value)
+	m.ctrl.Call(m, "IncCounter", metric, value)
 }
 
 // SetCounter indicates an expected call of SetCounter.
 func (mr *MockStorageMockRecorder) SetCounter(metric, value interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetCounter", reflect.TypeOf((*MockStorage)(nil).SetCounter), metric, value)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IncCounter", reflect.TypeOf((*MockStorage)(nil).IncCounter), metric, value)
 }
 
 // SetGauge mocks base method.
